@@ -2,10 +2,10 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
 
 # The gps config appropriate for this device
 $(call inherit-product, device/common/gps/gps_us_supl.mk)
-$(call inherit-product, device/jiayu/s3plus_n560a/vendor/copyfiles.mk)
-$(call inherit-product, vendor/jiayu/s3plus_n560a/s3plus_n560a-vendor-blobs.mk)
+$(call inherit-product, device/vernee/thor_k506/vendor/copyfiles.mk)
+$(call inherit-product, vendor/vernee/thor_k506/thor_k506-vendor-blobs.mk)
 
-LOCAL_PATH := device/jiayu/s3plus_n560a
+LOCAL_PATH := device/vernee/thor_k506
 
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
 
@@ -14,7 +14,7 @@ PRODUCT_AAPT_CONFIG := normal xhdpi xxhdpi
 PRODUCT_AAPT_PREF_CONFIG := xxhdpi
 
 # Recovery allowed devices
-TARGET_OTA_ASSERT_DEVICE := s3plus_n560a,S3H
+TARGET_OTA_ASSERT_DEVICE := thor_k506,k06td_a
 
 ifeq ($(TARGET_PREBUILT_KERNEL),)
 	LOCAL_KERNEL := $(LOCAL_PATH)/prebuilt/kernel

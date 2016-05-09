@@ -1,6 +1,6 @@
 # mt6753 platform boardconfig
-LOCAL_PATH := device/jiayu/s3plus_n560a
--include vendor/jiayu/s3plus_n560a/BoardConfigVendor.mk
+LOCAL_PATH := device/vernee/thor_k506
+-include vendor/vernee/thor_k506/BoardConfigVendor.mk
 
 TARGET_SPECIFIC_HEADER_PATH := $(LOCAL_PATH)/include
 
@@ -140,8 +140,8 @@ TARGET_RECOVERY_PIXEL_FORMAT := "RGBA_8888"
 TARGET_USERIMAGES_USE_EXT4 := true
 
 # Kernel OBJ WorkAround for build
-#$(shell mkdir -p $(OUT)/obj/KERNEL_OBJ/usr)
+$(shell mkdir -p $(OUT)/obj/KERNEL_OBJ/usr)
 
 # SELinux
 BOARD_SEPOLICY_DIRS := \
-       device/jiayu/s3plus_n560a/sepolicy
+       device/vernee/thor_k506/sepolicy
