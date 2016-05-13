@@ -123,10 +123,8 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.bluetooth_le.xml:system/etc/permissions/android.hardware.bluetooth_le.xml \
     frameworks/native/data/etc/android.hardware.telephony.cdma.xml:system/etc/permissions/android.hardware.telephony.cdma.xml \
     frameworks/native/data/etc/android.hardware.telephony.gsm.xml:system/etc/permissions/android.hardware.telephony.gsm.xml \
-    frameworks/native/data/etc/android.hardware.usb.host.xml:system/etc/permissions/android.hardware.usb.host.xml \
-    frameworks/native/data/etc/android.hardware.nfc.xml:system/etc/permissions/android.hardware.nfc.xml \
-    frameworks/native/data/etc/android.hardware.nfc.hce.xml:system/etc/permissions/android.hardware.nfc.hce.xml \
-    frameworks/native/data/etc/com.android.nfc_extras.xml:system/etc/permissions/com.android.nfc_extras.xml
+    frameworks/native/data/etc/android.hardware.usb.host.xml:system/etc/permissions/android.hardware.usb.host.xml
+
 
 # Media	
 PRODUCT_COPY_FILES += \
@@ -205,12 +203,12 @@ PRODUCT_PACKAGES += \
     libmtkplayer
 
 # NFC
-PRODUCT_PACKAGES += \
-    com.android.nfc_extras \
-    libmtknfc_dynamic_load_jni \
-    libnfc_mt6605_jni \
-    Nfc \
-    Tag
+#PRODUCT_PACKAGES += \
+#    com.android.nfc_extras \
+#    libmtknfc_dynamic_load_jni \
+#    libnfc_mt6605_jni \
+#    Nfc \
+#    Tag
 
 # Camera
 PRODUCT_PACKAGES += \
@@ -226,8 +224,11 @@ PRODUCT_PACKAGES += \
     resize2fs \
     setup_fs
 
+PRODUCT_PACKAGES += \
+    libfs_mgr
+
 PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=8
 
 # Dalvik/HWUI
-$(call inherit-product-if-exists, frameworks/native/build/phone-xxhdpi-2048-dalvik-heap.mk)
-$(call inherit-product-if-exists, frameworks/native/build/phone-xxhdpi-2048-hwui-memory.mk)
+$(call inherit-product-if-exists, frameworks/native/build/phone-xxxhdpi-3072-dalvik-heap.mk)
+$(call inherit-product-if-exists, frameworks/native/build/phone-xxxhdpi-3072-hwui-memory.mk)
