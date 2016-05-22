@@ -61,7 +61,7 @@ ro.kernel.zio=38,108,105,16
 debug.hwui.render_dirty_regions=false
 
 #qinhai change density
-ro.sf.lcd_density=480
+ro.sf.lcd_density=320
 
 # button jack mode & switch
 persist.sys.button_jack_profile=volume
