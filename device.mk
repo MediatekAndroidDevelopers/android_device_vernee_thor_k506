@@ -10,8 +10,8 @@ LOCAL_PATH := device/vernee/thor_k506
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
 
 # Device uses high-density artwork where available
-PRODUCT_AAPT_CONFIG := normal xhdpi xxhdpi
-PRODUCT_AAPT_PREF_CONFIG := xxhdpi
+PRODUCT_AAPT_CONFIG := normal
+PRODUCT_AAPT_PREF_CONFIG := xhdpi
 
 # Recovery allowed devices
 TARGET_OTA_ASSERT_DEVICE := thor_k506,k06td_a
@@ -42,6 +42,7 @@ PRODUCT_PACKAGES += \
     libaudio-resampler \
     tinymix \
     libtinyalsa
+
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/audio_device.xml:system/etc/audio_device.xml \
     $(LOCAL_PATH)/configs/audio_policy.conf:system/etc/audio_policy.conf
@@ -79,6 +80,10 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/rootdir/meta_init.project.rc:root/meta_init.project.rc \
     $(LOCAL_PATH)/rootdir/meta_init.rc:root/meta_init.rc \
     $(LOCAL_PATH)/rootdir/init.performance.rc:root/init.performance.rc
+
+# TWRP compatibility hack
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/recovery/etc/cwm.fstab:recovery/root/etc/cwm.fstab
 
 # Telecom
 PRODUCT_COPY_FILES += \
@@ -124,7 +129,6 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.telephony.cdma.xml:system/etc/permissions/android.hardware.telephony.cdma.xml \
     frameworks/native/data/etc/android.hardware.telephony.gsm.xml:system/etc/permissions/android.hardware.telephony.gsm.xml \
     frameworks/native/data/etc/android.hardware.usb.host.xml:system/etc/permissions/android.hardware.usb.host.xml
-
 
 # Media	
 PRODUCT_COPY_FILES += \
@@ -199,7 +203,7 @@ PRODUCT_PACKAGES += \
 
 # FMRadio
 PRODUCT_PACKAGES += \
-    FmRadio \
+    FMRadio \
     libmtkplayer
 
 # NFC
