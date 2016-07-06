@@ -605,7 +605,8 @@ on boot
     chmod 0660 /sys/power/autosleep
 
     chmod 0664 /sys/class/leds/lcd-backlight/brightness
-
+    
+    chown system system /sys/bus/platform/drivers/gyroscope/gyro_orientation
     chown system system /sys/devices/system/cpu/cpufreq/hotplug/cpu_num_base
     chmod 0660 /sys/devices/system/cpu/cpufreq/hotplug/cpu_num_base
     chown root   system /sys/kernel/debug/binder/transaction_log_enable
@@ -700,16 +701,6 @@ on property:ro.board.platform=mt6753
     chown system system /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq
     chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq
     write /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq 1300000
-
-on property:ro.board.platform=mt6737t
-    chown system system /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq
-    chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq
-    write /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq 1300000
-
-on property:ro.board.platform=mt6737m
-    chown system system /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq
-    chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq
-    write /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq 988000
 
 on property:vold.decrypt=trigger_reset_main
     start stop_modem
@@ -1252,6 +1243,20 @@ service qmc5983d /system/bin/qmc5983d
 	 user system
     group system
     class main
+
+service qmc6983d /system/bin/qmc6983d
+    disabled
+    user system
+    group system
+    class main
+    oneshot
+    
+service st480d /system/bin/st480d
+    disabled
+    user system
+    group system
+    class main
+    oneshot
 
 service orientationd /system/bin/orientationd
     disabled

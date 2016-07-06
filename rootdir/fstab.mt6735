@@ -11,7 +11,6 @@
 /dev/block/platform/mtk-msdc.0/11230000.msdc0/by-name/nvdata /nvdata ext4 noatime,nosuid,nodev,noauto_da_alloc,discard wait,check,formattable
 /dev/block/platform/mtk-msdc.0/11230000.msdc0/by-name/custom /custom ext4 ro wait
 /dev/block/platform/mtk-msdc.0/11230000.msdc0/by-name/frp /persistent emmc defaults defaults
-
 /dev/block/platform/mtk-msdc.0/11230000.msdc0/by-name/nvram /nvram emmc defaults defaults
 /dev/block/platform/mtk-msdc.0/11230000.msdc0/by-name/proinfo /proinfo emmc defaults defaults
 /dev/block/platform/mtk-msdc.0/11230000.msdc0/by-name/lk /bootloader emmc defaults defaults

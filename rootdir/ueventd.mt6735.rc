@@ -13,6 +13,68 @@ subsystem adf
 /dev/ashmem               0666   root       root
 /dev/binder               0666   root       root
 
+   #change partition permission
+/dev/preloader            0640   root       system
+/dev/bootimg              0640   root       system
+/dev/recovery             0660   root       system
+/dev/sec_ro               0640   root       system
+/dev/kb                   0660   root       system
+/dev/dkb                  0660   root       system
+/dev/seccfg               0660   root       system
+/dev/pro_info             0660	 root	    system
+/dev/otp 		  0660	 root	    system
+/dev/nvram 		   0660	 root	    system
+/dev/misc		   0660	 root	    system
+/dev/misc2		   0660	 root	    system
+/dev/block/platform/mtk-msdc.0/by-name/misc2		   0660	 root	    system
+/dev/block/mmcblk0	   0660	 root	    system
+/dev/block/mmcblk0boot0	   0660	 root	    system
+/dev/block/mmcblk0boot1	   0660	 root	    system
+/dev/misc-sd              0660   root       system
+
+
+#connectivity
+# Create char device file for WMT, GPS, BT, FM, WIFI
+#    mknod /dev/stpwmt c 190 0;
+#    mknod /dev/stpgps c 191 0;
+#    mknod /dev/stpbt  c 192 0;
+
+#    chmod 0660 /dev/stpwmt
+#    chown system system /dev/stpwmt
+#    chmod 0660 /dev/wmtdetect
+#    chown system system /dev/wmtdetect
+#
+# BT
+#    chmod 0660 /dev/stpbt
+#    chown bluetooth radio /dev/stpbt
+#
+# GPS
+#    chown gps gps /dev/stpgps
+#    chmod 0660 /dev/stpgps
+
+/dev/stpwmt              0660  system      system
+/dev/wmtdetect           0660  system      system
+/dev/stpbt               0660  bluetooth   net_bt_stack
+/dev/stpgps              0660  gps         gps
+/dev/stpant				 0660  system      system
+
+# WIFI
+#  chown system system /dev/wmtWifi
+#  chmod  0660  /dev/wmtWifi
+
+/dev/wmtWifi             0660  system      system
+
+# FMRadio
+/dev/fm			 0660  system	   media
+
+# add the read write right of ttyUSB*
+/dev/bus/usb/*     	  0660   root       usb
+/dev/ttyUSB0              0660   radio      radio
+/dev/ttyUSB1              0660   radio      radio
+/dev/ttyUSB2              0660   radio      radio
+/dev/ttyUSB3              0660   radio      radio
+/dev/ttyUSB4              0660   radio      radio
+
 # Anyone can read the logs, but if they're not in the "logs"
 # group, then they'll only see log entries for their UID.
 /dev/log/*                0666   root       log
