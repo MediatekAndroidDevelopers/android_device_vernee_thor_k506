@@ -1,11 +1,7 @@
-# MTK platform .rc configure
-
-import init.project.rc
-import init.aee.rc
-
-# init.modem.rc must be the LAST rc file because vold.post_fs_data_done is set in it
-import init.modem.rc
-# *** DO NOT import the new rc file after this line ***
+import /init.project.rc
+import /init.ssd.rc
+import /init.performance.rc
+import /init.modem.rc
 
 on early-init
     mount debugfs debugfs /sys/kernel/debug
@@ -86,19 +82,11 @@ on init
 
 # mount different fs start
 
-on property:persist.mediatek.fg.disable=1
-    write /sys/devices/platform/battery_meter/FG_daemon_disable 1
-
-
-on property:persist.mediatek.fg.log.enable=1
-		chmod 0666 /dev/kmsg
-    write /sys/devices/platform/battery_meter/FG_daemon_log_level 7
-    write /proc/sys/kernel/printk 8
 
 on charger
     mount ext4 /dev/block/platform/mtk-msdc.0/11230000.msdc0/by-name/system /system ro wait
-		chmod 0666 /dev/kmsg
-		write /sys/devices/platform/battery_meter/FG_daemon_log_level 7
+    chmod 0666 /dev/kmsg
+    write /sys/devices/platform/battery_meter/FG_daemon_log_level 7
     start fuelgauged
     start kpoc_charger
     start servicemanager
@@ -110,9 +98,7 @@ on fs
     exec /system/bin/tune2fs -O has_journal -u 10010 -r 4096 /dev/block/platform/mtk-msdc.0/11230000.msdc0/by-name/userdata
     write /proc/bootprof "INIT:Mount_END"
 
-on fs
-
-   mount iso9660 loop@/system/etc/iAmCdRom.iso /mnt/cd-rom ro
+   #mount iso9660 loop@/system/etc/iAmCdRom.iso /mnt/cd-rom ro
 
 on post-fs
     # Support legacy paths
@@ -152,7 +138,11 @@ on post-fs-data
     chmod 0771 /persist
 
     # create basic filesystem structure
-    # mkdir /data/nvram 2770 root system
+    mkdir /data/nvram 0770 media system
+    mkdir /data/nvram/APCFG 0770 media system
+    mkdir /data/nvram/APCFG/APRDCL 0770 media system
+    mkdir /data/nvram/APCFG/APRDEB 0770 media system
+
     # We chown/chmod /nvdata again so because mount is run as root + defaults
     #chown root system /nvdata
     # chmod 0771 /nvdata
@@ -797,18 +787,6 @@ service bootlogoupdater /system/bin/boot_logo_updater
     class core
     oneshot
 
-service mobile_log_d /system/bin/mobile_log_d
-    class main
-# MTK PR_DEBUG SWITCH
-on property:debug.MB.prdebug=1
-    write /sys/kernel/debug/dynamic_debug/control "file *mediatek* +p"
-    write /sys/kernel/debug/dynamic_debug/control "file *gpu* -p"
-on property:debug.MB.prdebug=0
-    write /sys/kernel/debug/dynamic_debug/control "file *mediatek* -p"
-
-service met_log_d /system/bin/met_log_d
-    class main
-
 # bugreport is triggered by holding down volume down, volume up and power
 service bugreport /system/bin/dumpstate -d -p -B \
         -o /data/data/com.android.shell/files/bugreports/bugreport
@@ -839,7 +817,6 @@ service gas_srv /system/bin/gas_srv
 
 service netdiag /system/bin/netdiag
     class main
-
 
 service nvram_daemon /system/bin/nvram_daemon
     class main
@@ -1069,12 +1046,6 @@ service pppd_gprs /system/bin/pppd_dt /dev/ttyACM0 debug noauth refuse-eap usepe
     disabled
     oneshot
 
-##Add by T.Zh for ppp daemon
-#service pppd /system/bin/pppd file /data/misc/ppp/ppp_options
-#    user root
-#    disabled
-#    oneshot
-#
 ##
 #
 #  Modem related services (End)
@@ -1107,68 +1078,6 @@ service mnld /system/xbin/mnld
     user gps
     group gps inet misc sdcard_rw sdcard_r media_rw system
     socket mnld stream 660 gps system
-
-service ipod /system/bin/ipod
-    user root
-    group root
-    disabled
-
-service extmdlogger /system/bin/extmdlogger
-    class main
-    user shell
-    group shell system radio sdcard_rw inet sdcard_r media_rw
-
-service GoogleOtaAgent /system/bin/GoogleOtaBinder
-    class main
-    user root
-    group root
-
-service mdlogger /system/bin/mdlogger
-    class main
-    user shell
-    group shell system radio sdcard_rw inet sdcard_r media_rw
-    disabled
-    oneshot
-
-service dualmdlogger /system/bin/dualmdlogger
-    class main
-    user shell
-    group shell system radio sdcard_rw inet sdcard_r media_rw
-    disabled
-    oneshot
-
-service emdlogger1 /system/bin/emdlogger1
-    class main
-    user shell
-    group system shell radio sdcard_rw inet sdcard_r media_rw
-    disabled
-    oneshot
-
-service emdlogger2 /system/bin/emdlogger2
-    class main
-    user shell
-    group system shell radio sdcard_rw inet sdcard_r media_rw
-    disabled
-    oneshot
-
-service emdlogger5 /system/bin/emdlogger5
-    class main
-    user shell
-    group system shell radio sdcard_rw inet sdcard_r media_rw
-    disabled
-    oneshot
-
-service emdlogger6 /system/bin/emdlogger6
-    class main
-    user shell
-    group system shell radio sdcard_rw inet sdcard_r media_rw
-    disabled
-    oneshot
-
-service md_monitor /system/bin/md_monitor
-    class main
-    user system
-    group system radio sdcard_rw inet sdcard_r media_rw
 
 #
 #sensor service (begin)
@@ -1284,37 +1193,6 @@ service mc64xxd /system/bin/mc64xxd
 #sensor service (end)
 #
 
-#
-#emsvr service (start)
-#
-on property:ro.build.type=eng
-    start emsvr
-
-on property:ro.build.type=user
-    start emsvr_user
-
-on property:ro.build.type=userdebug
-    start emsvr_user
-
-service emsvr_user /system/bin/em_svr
-    disabled
-    user system
-    group system radio diag net_bt_stack
-
-service emsvr /system/bin/em_svr
-    disabled
-    user root
-    group net_bt_stack
-
-#
-#emsvr service (end)
-#
-
-service shutdown /system/bin/shutdown
-    user root
-    group root
-    disabled
-
 service NvRAMAgent /system/bin/nvram_agent_binder
     class main
     user system
@@ -1323,6 +1201,7 @@ service NvRAMAgent /system/bin/nvram_agent_binder
 service thermal_manager /system/bin/thermal_manager
     class main
     user root
+    group system
     oneshot
 
 service thermal /system/bin/thermal
@@ -1359,15 +1238,6 @@ service batterywarning /system/bin/batterywarning
     user shell
     group shell
 
-service backuprestore /system/bin/br_app_data_service
-	class main
-	socket backuprestore stream 0660 root sdcard_rw
-	user root
-
-#service BGW /system/xbin/BGW
-#	user system
-#	group gps system radio
-#	class main
 service MtkCodecService /system/bin/MtkCodecService
     class main
     user system
