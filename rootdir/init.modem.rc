@@ -16,7 +16,7 @@ on post-fs-data
     chown radio radio /dev/ccci_ioctl1
     chown radio radio /dev/ccci_ipc_1220_0
     chown radio radio /dev/ccci_monitor
-    chown radio radio /dev/ccci_aud
+    chown media audio /dev/ccci_aud
 
     # Selinux
     mkdir /data/ccci_cfg 0770 system radio
@@ -91,19 +91,19 @@ service permission_check /system/bin/permission_check
     oneshot
 
 service ccci_fsd /system/bin/ccci_fsd 0
-    user radio
+    user root
     group radio system
     class core
     oneshot
 
 service ccci_mdinit /system/bin/ccci_mdinit 0
-    user system
+    user root
     group radio system
     class core
     oneshot
 
 service ccci_rpcd /system/bin/ccci_rpcd 0
-    user radio
+    user root
     group radio cache inet misc
     class core
     oneshot
