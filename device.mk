@@ -76,11 +76,16 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/recovery/etc/twrp.fstab:recovery/root/etc/twrp.fstab
 
+# TWRP compatibility hack
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/recovery/etc/cwm.fstab:recovery/root/etc/cwm.fstab
+
 # Telecom
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/apns-conf.xml:system/etc/apns-conf.xml \
     $(LOCAL_PATH)/configs/ecc_list.xml:system/etc/ecc_list.xml \
     $(LOCAL_PATH)/configs/spn-conf.xml:system/etc/spn-conf.xml
+#    $(LOCAL_PATH)/configs/apns-conf.xml:system/etc/apns-conf.xml \
+    
 
 # Thermal
 PRODUCT_COPY_FILES += \
@@ -225,5 +230,5 @@ PRODUCT_PACKAGES += \
 PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=8
 
 # Dalvik/HWUI
-$(call inherit-product-if-exists, frameworks/native/build/phone-xxxhdpi-3072-dalvik-heap.mk)
-$(call inherit-product-if-exists, frameworks/native/build/phone-xxxhdpi-3072-hwui-memory.mk)
+$(call inherit-product-if-exists, frameworks/native/build/phone-xhdpi-2048-dalvik-heap.mk)
+$(call inherit-product-if-exists, frameworks/native/build/phone-xhdpi-2048-hwui-memory.mk)
