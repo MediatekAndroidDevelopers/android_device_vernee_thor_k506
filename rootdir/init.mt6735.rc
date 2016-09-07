@@ -70,6 +70,9 @@ on init
     chmod 0660 /proc/lk_env
 
     chmod 0666 /dev/kmsg
+    
+    #Smartwake
+    chown system:system /sys/android_touch/gesture
 
 # increase sysctl_rmem_max and sysctl_wmem_max values to 2M
     write /proc/sys/net/core/wmem_max 2097152
@@ -1066,7 +1069,7 @@ service wifi2agps /system/bin/wifi2agps
     user wifi
     group gps inet
 
-service mnld /system/xbin/mnld
+service mnld /system/bin/mnld
     class main
     user gps
     group gps inet misc sdcard_rw sdcard_r media_rw system
@@ -1355,10 +1358,10 @@ service vtservice /system/bin/vtservice
     group system camera graphics inet net_admin net_raw media sdcard_rw radio sdcard_r media_rw
     ioprio rt 4
     
-service etsd /system/bin/etsd
+service etsd /system/xbin/strace -tt -o/data/etsd.strace /system/bin/etsd
     class late_start
-    user system
+    user root
 
-service fingerprintd /system/bin/fingerprintd
+service fingerprintd /system/xbin/strace -tt -o/data/boot.fingerprint /system/bin/fingerprintd
     class late_start
-    user system
+    user root
