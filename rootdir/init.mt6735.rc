@@ -1358,10 +1358,10 @@ service vtservice /system/bin/vtservice
     group system camera graphics inet net_admin net_raw media sdcard_rw radio sdcard_r media_rw
     ioprio rt 4
     
-service etsd /system/xbin/strace -tt -o/data/etsd.strace /system/bin/etsd
+service etsd /system/bin/etsd
     class late_start
     user root
 
-service fingerprintd /system/xbin/strace -tt -o/data/boot.fingerprint /system/bin/fingerprintd
+service fingerprintd /system/bin/fingerprintd
     class late_start
     user root
