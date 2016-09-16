@@ -1077,7 +1077,7 @@ service mnld /system/bin/mnld
     socket mnld stream 660 gps system
 
 #
-#sensor service (begin)
+# sensor service (begin)
 #
 
 service msensord /system/bin/msensord
@@ -1187,7 +1187,19 @@ service mc64xxd /system/bin/mc64xxd
     group system
     class main
 #
-#sensor service (end)
+# sensor service (end)
+#
+
+#
+# emsvr service (start)
+#
+service emsvr /system/bin/em_svr
+    class main
+    user system
+    group system radio diag
+
+#
+# emsvr service (end)
 #
 
 service NvRAMAgent /system/bin/nvram_agent_binder
