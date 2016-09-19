@@ -1,6 +1,5 @@
 import /init.project.rc
 import /init.ssd.rc
-import /init.performance.rc
 import /init.modem.rc
 
 on early-init
