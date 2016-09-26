@@ -222,6 +222,17 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     Gello
 
+# Snap
+PRODUCT_PACKAGES += \
+    Snap
+
+# Messaging
+PRODUCT_PACKAGES += \
+    messaging
+
+# Sensor Calibration
+PRODUCT_PACKAGES += libem_sensor_jni
+
 # Filesystem management tools
 PRODUCT_PACKAGES += \
     e2fsck \
