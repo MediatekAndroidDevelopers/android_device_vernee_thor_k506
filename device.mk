@@ -1,8 +1,3 @@
-$(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
-
-# The gps config appropriate for this device
-$(call inherit-product, device/common/gps/gps_us_supl.mk)
-$(call inherit-product, device/vernee/thor_k506/vendor/copyfiles.mk)
 $(call inherit-product, vendor/vernee/thor_k506/thor_k506-vendor-blobs.mk)
 
 LOCAL_PATH := device/vernee/thor_k506
@@ -177,25 +172,7 @@ PRODUCT_PACKAGES += \
 
 # GPS
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/agps_profiles_conf2.xml:system/etc/agps_profiles_conf2.xml \
-
-PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
-    ro.adb.secure=0 \
-    ro.secure=0 \
-    ro.allow.mock.location=1 \
-    ro.debuggable=1 \
-    ro.zygote=zygote64_32 \
-    camera.disable_zsl_mode=1 \
-    ro.mount.fs=EXT4 \
-    persist.service.acm.enable=0 \
-    persist.sys.usb.config=mtp
-
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.kernel.android.checkjni=0 \
-    ro.telephony.ril.config=fakeiccid  \
-    persist.call_recording.enabled=true \
-    persist.call_recording.src=1 \
-    persist.debug.wfd.enable=1
+    $(LOCAL_PATH)/configs/agps_profiles_conf2.xml:system/etc/agps_profiles_conf2.xml
 
 PRODUCT_PACKAGES += \
     librs_jni \
@@ -243,10 +220,7 @@ PRODUCT_PACKAGES += \
     resize2fs \
     setup_fs
 
-PRODUCT_PACKAGES += \
-    libfs_mgr
-
-PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=8
+PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=0
 
 # Dalvik/HWUI
 $(call inherit-product-if-exists, frameworks/native/build/phone-xhdpi-2048-dalvik-heap.mk)
