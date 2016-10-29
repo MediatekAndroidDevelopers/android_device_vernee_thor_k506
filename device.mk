@@ -195,10 +195,6 @@ PRODUCT_PACKAGES += \
 #    Nfc \
 #    Tag
 
-# Gello
-PRODUCT_PACKAGES += \
-    Gello
-
 # Snap
 PRODUCT_PACKAGES += \
     Snap
@@ -225,3 +221,5 @@ PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=0
 # Dalvik/HWUI
 $(call inherit-product-if-exists, frameworks/native/build/phone-xhdpi-2048-dalvik-heap.mk)
 $(call inherit-product-if-exists, frameworks/native/build/phone-xhdpi-2048-hwui-memory.mk)
+
+$(call inherit-product-if-exists, vendor/mad/config/common.mk)
