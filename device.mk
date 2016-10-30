@@ -216,6 +216,18 @@ PRODUCT_PACKAGES += \
     resize2fs \
     setup_fs
 
+# exfat
+PRODUCT_PACKAGES += \
+    mount.exfat \
+    fsck.exfat \
+    mkfs.exfat
+
+#ntfs
+PRODUCT_PACKAGES += \
+    fsck.ntfs \
+    mkfs.ntfs \
+    mount.ntfs
+
 PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=0
 
 # Dalvik/HWUI
