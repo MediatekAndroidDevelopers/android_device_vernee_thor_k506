@@ -3,9 +3,6 @@ LOCAL_PATH := device/vernee/thor_k506
 -include vendor/vernee/thor_k506/BoardConfigVendor.mk
 
 TARGET_SPECIFIC_HEADER_PATH := $(LOCAL_PATH)/include
-
-USE_CAMERA_STUB := true
-TARGET_PROVIDES_INIT_RC := true
 TARGET_PROVIDES_AUDIOSERVER_RC := true
 
 # Platform
@@ -15,14 +12,12 @@ TARGET_NO_BOOTLOADER := true
 TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_NO_FACTORYIMAGE := true
 
-TARGET_LDPRELOAD += libxlog.so
-
 # CPU
 TARGET_ARCH := arm64
 TARGET_ARCH_VARIANT := armv8-a
 TARGET_CPU_ABI := arm64-v8a
 TARGET_CPU_ABI2 :=
-TARGET_CPU_VARIANT := generic
+TARGET_CPU_VARIANT := cortex-a53
 TARGET_CPU_SMP := true
 
 TARGET_2ND_ARCH := arm
@@ -111,7 +106,7 @@ TARGET_PROVIDES_LIBLIGHT := false
 TARGET_SYSTEM_PROP := $(LOCAL_PATH)/system.prop
 
 # Recovery
-RECOVERY_VARIANT=twrp
+RECOVERY_VARIANT := twrp
 
 # TWRP stuff
 ifeq ($(RECOVERY_VARIANT), twrp)
