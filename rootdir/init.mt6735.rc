@@ -1,6 +1,5 @@
 import /init.project.rc
 import /init.ssd.rc
-import /init.performance.rc
 import /init.modem.rc
 
 on early-init
@@ -59,11 +58,9 @@ on init
     chown system system /sys/bus/platform/drivers/gyroscope/fifo_data_frame
     chown system system /sys/bus/platform/drivers/gyroscope/fifo_framecount
 
-    # Vanzo:yinjun on: Tue, 31 Mar 2015 19:43:54 +0800
     # add remoteir
     chmod 0664 /dev/remote_ctrl_dev
     chown system system /dev/remote_ctrl_dev
-    # End of Vanzo: yinjun
 
     # change lk_env permission
     chown root system /proc/lk_env
@@ -71,9 +68,6 @@ on init
 
     chmod 0666 /dev/kmsg
     
-    #Smartwake
-    chown system:system /sys/android_touch/gesture
-
 # increase sysctl_rmem_max and sysctl_wmem_max values to 2M
     write /proc/sys/net/core/wmem_max 2097152
     write /proc/sys/net/core/rmem_max 2097152
@@ -85,6 +79,7 @@ on charger
     mount ext4 /dev/block/platform/mtk-msdc.0/11230000.msdc0/by-name/system /system ro wait
     chmod 0666 /dev/kmsg
     write /sys/devices/platform/battery_meter/FG_daemon_log_level 7
+    exec /system/bin/setprop sys.usb.config adb
     start fuelgauged
     start kpoc_charger
     start servicemanager
@@ -130,6 +125,12 @@ on post-fs
 
     chown system system /protect_s
     chmod 0770 /protect_s
+    
+    #Smartwake
+    chown system system /sys/android_touch/gesture
+    
+    chown system system /sys/block/mmcblk0/queue/scheduler
+    chown system system /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
 
 on post-fs-data
     chown system system /persist
@@ -183,10 +184,6 @@ on post-fs-data
     # dhcpv6 server
     mkdir /data/misc/wide-dhcpv6 0770 dhcp wifi
     chown dhcp wifi /data/misc/wide-dhcpv6
-
-    # radvd
-    mkdir /data/misc/radvd 0770 system system
-    chmod 444 /etc/radvd/radvd.conf
 
     # Mali 3D GPU driver
     #insmod /system/lib/modules/mali.ko
@@ -427,6 +424,9 @@ on post-fs-data
     chmod 0660 /dev/mtk_disp_mgr
     chown system graphics /dev/mtk_disp_mgr
 
+    chmod 0660 /sys/devices/platform/mtk_disp_mgr.0/rgb
+    chown system system /sys/devices/platform/mtk_disp_mgr.0/rgb
+
     chmod 0660 /dev/mtkfb_vsync
     chown system graphics /dev/mtkfb_vsync
 
@@ -577,9 +577,6 @@ on post-fs-data
 
     chmod 0660 /mtd@misc
     chown root system /mtd@misc
-
-    chmod 0664 /sys/bus/platform/drivers/mem_bw_ctrl/concurrency_scenario
-    chown system media /sys/bus/platform/drivers/mem_bw_ctrl/concurrency_scenario
 
     #mtk_sched
     chmod 0660 /dev/mtk_sched
@@ -1076,7 +1073,7 @@ service mnld /system/bin/mnld
     socket mnld stream 660 gps system
 
 #
-#sensor service (begin)
+# sensor service (begin)
 #
 
 service msensord /system/bin/msensord
@@ -1186,7 +1183,19 @@ service mc64xxd /system/bin/mc64xxd
     group system
     class main
 #
-#sensor service (end)
+# sensor service (end)
+#
+
+#
+# emsvr service (start)
+#
+service emsvr /system/bin/em_svr
+    class main
+    user system
+    group system radio diag
+
+#
+# emsvr service (end)
 #
 
 service NvRAMAgent /system/bin/nvram_agent_binder
@@ -1358,10 +1367,10 @@ service vtservice /system/bin/vtservice
     group system camera graphics inet net_admin net_raw media sdcard_rw radio sdcard_r media_rw
     ioprio rt 4
     
-service etsd /system/xbin/strace -tt -o/data/etsd.strace /system/bin/etsd
+service etsd /system/bin/etsd
     class late_start
     user root
 
-service fingerprintd /system/xbin/strace -tt -o/data/boot.fingerprint /system/bin/fingerprintd
+service fingerprintd /system/bin/fingerprintd
     class late_start
     user root
