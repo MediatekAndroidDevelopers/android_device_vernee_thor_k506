@@ -2,10 +2,6 @@ import init.mt6735.usb.rc
 import init.modem.rc
 
 on early-init
-    mount debugfs debugfs /sys/kernel/debug
-    chmod 0755 /sys/kernel/debug
-
-on early-init
     # Turn off backlight on blank
     write /sys/class/leds/lcd-backlight/trigger "backlight"
 
@@ -15,24 +11,16 @@ on init
     # mount points
     mkdir /protect_f 0771 system system
     mkdir /protect_s 0771 system system
-
     mkdir /persist   0771 system system
     mkdir /nvdata    0771 system system
 
     chown root system /dev/kmsg
     chmod 0660 /dev/kmsg
-    
-# increase sysctl_rmem_max and sysctl_wmem_max values to 2M
-    write /proc/sys/net/core/wmem_max 2097152
-    write /proc/sys/net/core/rmem_max 2097152
 
 on fs
     mount_all /fstab.mt6735
-    mount ext4 /dev/block/platform/mtk-msdc.0/11230000.msdc0/by-name/custom /custom ro wait
-    exec /system/bin/tune2fs -O has_journal -u 10010 -r 4096 /dev/block/platform/mtk-msdc.0/11230000.msdc0/by-name/userdata
 
 on post-fs
-    # Support legacy paths
     symlink /sdcard /storage/sdcard0
 
     chown system system /protect_f
@@ -48,15 +36,41 @@ on post-fs
     mkdir /nvdata/md_cmn 0770 system radio
     mkdir /nvdata/media  0770 media audio
     restorecon_recursive /nvdata
-    
-    #Smartwake
-    chown system system /sys/android_touch/gesture
-    
-    chown system system /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+
+    # Wifi
+    mknod /dev/wmtWifi c 153 0
+    chmod 0660 /dev/wmtWifi
+    chown system system /dev/wmtWifi
+
+    mknod /dev/stpwmt c 190 0
+    mknod /dev/stpgps c 191 0
+    mknod /dev/stpbt c 192 0
+
+    # BT
+    chmod 0660 /dev/stpbt
+    chown radio bluetooth /dev/stpbt
+
+    chmod 0660 /dev/stpwmt
+    chown system system /dev/stpwmt
+
+    chmod 0660 /dev/wmtdetect
+    chown system system /dev/wmtdetect
+
+    restorecon /dev/wmtWifi
+    restorecon /dev/stpwmt
+    restorecon /dev/stpbt
+    restorecon /dev/stpgps
+
+    # GPS
+    chmod 0660 /dev/gps
+    chown system gps /dev/gps
+    chmod 0660 /dev/stpgps
+    chown gps gps /dev/stpgps
 
 on post-fs-data
     chown root system /nvdata
     chmod 0771 /nvdata
+    rm /data/nvram
     symlink /nvdata /data/nvram
     mkdir /nvdata/media 0771 media audio
 
@@ -66,9 +80,8 @@ on post-fs-data
     # rfkill
     chmod 0660 /dev/rfkill
 
-    # radio
+    # Radio
     mkdir /dev/radio 0770 radio radio
-
     mkdir /data/drm/wv 0770 drm system
 
     # GPS
@@ -91,7 +104,6 @@ on post-fs-data
     write /sys/class/misc/md32/md32_boot 1
 
     # Mali 3D GPU driver
-    #insmod /system/lib/modules/mali.ko
     chmod 666 /dev/mali0
 
     # watch dog kicker
@@ -102,12 +114,6 @@ on post-fs-data
 
     # RTC
     mkdir /data/misc/rtc 0770 system system
-
-    # M4U
-    #insmod /system/lib/modules/m4u.ko
-    #mknod /dev/M4U_device c 188 0
-    chmod 0444 /dev/m4u
-    #chown system media /dev/M4U_device
 
     # set mlock limit to infinate (for m4u operation)
     setrlimit 8 -1 -1
@@ -209,11 +215,6 @@ on post-fs-data
     chown system system /sys/class/misc/m_baro_misc/barodelay
     chown system system /sys/class/misc/m_baro_misc/barobatch
     chown system system /sys/class/misc/m_baro_misc/baroflush
-	
-
-    # msensor
-    chmod 0444 /sys/bus/platform/drivers/msensor/daemon
-    chown system system /sys/bus/platform/drivers/msensor/daemon
 
     # VideoCodec
     chmod 0660 /dev/Vcodec
@@ -221,7 +222,7 @@ on post-fs-data
 
     # MJC
     chmod 0660 /dev/MJC
-    chown media system /dev/MJC
+    chown system media /dev/MJC
 
     # PMIC property
     chown radio system /sys/devices/platform/mt-pmic/low_battery_protect_stop
@@ -264,11 +265,9 @@ on post-fs-data
     chown root system /dev/sec
 
     # FM Radio device node
-    mknod /dev/fm     c 193 0;
-    chmod 0660 /dev/fm
-    chown media media /dev/fm
-
-    # device apc settings
+    exec /system/xbin/mknod /dev/fm c 230 0
+    chmod 0666 /dev/fm
+    chown system media /dev/fm
 
     # device info /proc interface
     chmod 0440 /dev/devmap
@@ -318,8 +317,7 @@ on post-fs-data
     chown system camera /sys/bus/platform/drivers/mem_bw_ctrl/concurrency_scenario
     chmod 0660 /sys/bus/platform/drivers/mem_bw_ctrl/concurrency_scenario
 
-   # change partition permission
-
+    # change partition permission
     chmod 0640 /mtd@sec_ro
     chown root system /mtd@sec_ro
 
@@ -350,13 +348,26 @@ on post-fs-data
 
     # BT SCO CVSD, for MT6572 and MT6582 CVSD codec on AP
     chmod 0660 /dev/ebc
-    chown media media /dev/ebc
+    chown system media /dev/ebc
+
+    # autok
+    chown root system /sys/autok/debug
+    chown root system /sys/autok/param_count
+    chown root system /sys/autok/ready
+    chown root system /sys/autok/ss_corner
+    chown root system /sys/autok/suggest_vol
+    chown root system /sys/autok/stage1/2/DONE
+    chown root system /sys/autok/stage1/2/PARAMS
+    chown root system /sys/autok/stage1/2/VOLTAGE
+    chown root system /sys/autok/stage1/2/LOG
+    chown root system /sys/autok/stage2/2
 
     # AGPS
     mkdir /data/agps_supl 0771 gps system
 
     # Thermal	
     mkdir /data/.tp/ 0775 system system
+
     chmod 0660 /dev/ttyC2
     chown system gps /dev/ttyC2
 
@@ -370,11 +381,14 @@ on post-fs-data
     chmod 0660 /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
     chown system system /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
     chmod 0660 /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
-	
-    # create directory /data/subt for subtitle
-    mkdir /mnt/subt/ 0770 media media
 
     chown system system /sys/bus/platform/drivers/gyroscope/gyro_orientation
+
+    # Smartwake
+    chown system system /sys/android_touch/gesture
+
+    # performance
+    chown system system /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
 
 on boot
     write /proc/sys/vm/dirty_writeback_centisecs 300
@@ -396,8 +410,14 @@ on boot
     chown system system /sys/class/leds/keyboard-backlight/trigger
     chown system system /sys/class/leds/jogball-backlight/trigger
     chown system system /sys/class/leds/red/trigger
+    chown system system /sys/class/leds/red/delay_on
+    chown system system /sys/class/leds/red/delay_off
     chown system system /sys/class/leds/green/trigger
+    chown system system /sys/class/leds/green/delay_on
+    chown system system /sys/class/leds/green/delay_off
     chown system system /sys/class/leds/blue/trigger
+    chown system system /sys/class/leds/blue/delay_on
+    chown system system /sys/class/leds/blue/delay_off
 
     # HMP CPU hotplug strategy
     chown system system /proc/hps/num_base_perf_serv
@@ -416,11 +436,7 @@ on boot
     chmod 0660 /proc/cpufreq/cpufreq_limited_by_hevc
     chown system system /proc/cpufreq/cpufreq_limited_max_freq_by_user
     chmod 0660 /proc/cpufreq/cpufreq_limited_max_freq_by_user
-
-    # BW monitor
-    chown system system /proc/fliper
-    chmod 0664 /proc/fliper
-
+    
     # change permissions about terminal
     chown root radio /proc/net/vlan/config
     chmod 0640 /proc/net/vlan/config
@@ -444,9 +460,9 @@ on boot
     chown shell system /proc/driver/wmt_dbg
     chown shell system /proc/driver/wmt_aee
 
-    # BT relayer mode USB VCOM
-    chown bluetooth radio /dev/ttyGS2
-    chmod 0660 /dev/ttyGS2
+    # /dev/ttyMT2 for Connectivity BT/FM/GPS usage
+    chmod 0660 /dev/ttyMT2
+    chown system system /dev/ttyMT2
 
 on property:ro.board.platform=mt6753
     chown system system /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq
@@ -458,20 +474,15 @@ on property:vold.decrypt=trigger_reset_main
 
 on property:vold.decrypt=trigger_restart_min_framework
     start start_modem
-    start msensord
     start permission_check
-    start stp_dump
 
 on property:vold.decrypt=trigger_restart_framework
     start nvram_daemon
     start start_modem
-    start msensord
     start permission_check
 
 on property:vold.decrypt=trigger_shutdown_framework
     start stop_modem
-    start swapoff_action
-    stop stp_dump
 
 service stop_modem /system/bin/md_ctrl 0
     class main
@@ -483,55 +494,28 @@ service start_modem /system/bin/md_ctrl 1
     disabled
     oneshot
 
-# start ged_srv
-on property:sys.boot_completed=1
-    start ged_srv
-
-service ged_srv /system/bin/ged_srv
-    class core
-    user system
-    group system
-    disabled
-
-on property:sys.boot_completed=1
-    start gas_srv
-
-service gas_srv /system/bin/gas_srv
-    class core
-    user system
-    group system
-    disabled
-
-service netdiag /system/bin/netdiag
-    class main
-
 service nvram_daemon /system/bin/nvram_daemon
     class main
     user root
     group system
     oneshot
 
-service md_minilog_util /system/bin/md_minilog_util
-    user root
-    disabled
-    oneshot
-
 service pq /system/bin/pq
     class main
     user system
     group system graphics
-
-service aal /system/bin/aal
-    class main
-    user system
-    group system graphics
-
-# FOTA upgrade
-service rbfota /system/bin/fota1
-    class main
-    disabled
     oneshot
 
+#
+# MTK Wi-Fi related services (Begin)
+#
+
+# monitor property and power on/off wlan
+on property:wlan.driver.status=ok
+    write /dev/wmtWifi "1"
+
+on property:wlan.driver.status=unloaded
+    write /dev/wmtWifi "0"
 
 service p2p_supplicant /system/bin/wpa_supplicant \
     -iwlan0 -Dnl80211 -c/data/misc/wifi/wpa_supplicant.conf \
@@ -565,57 +549,6 @@ service wpa_supplicant /system/bin/wpa_supplicant \
 # MTK Wi-Fi related services (End)
 #
 
-service DMAgent /system/bin/dm_agent_binder
-    class main
-    user system
-    group system cache
-
-service PPLAgent /system/bin/ppl_agent
-    class main
-    user system
-    group system cache
-
-
-service cmmb /system/bin/cmmbsp
-    class main
-    user root
-    group system audio camera graphics inet net_bt net_bt_admin net_bw_acct media
-    ioprio rt 4
-
-service enableswap /system/bin/sh /enableswap.sh
-    class late_start
-    oneshot
-    seclabel u:r:enableswap:s0
-
-service swapoff_action /system/bin/sh /disableswap.sh
-    class main
-    disabled
-    oneshot
-    seclabel u:r:disableswap:s0
-
-service dbus /system/bin/dbus-daemon --system --nofork
-    class main
-    socket dbus stream 660 bluetooth bluetooth
-    user bluetooth
-    group bluetooth net_bt_admin
-
-service bluetoothd /system/bin/bluetoothd -n
-    class main
-    socket bluetooth stream 660 bluetooth bluetooth
-    socket dbus_bluetooth stream 660 bluetooth bluetooth
-    # init.rc does not yet support applying capabilities, so run as root and
-    # let bluetoothd drop uid to bluetooth with the right linux capabilities
-    group bluetooth net_bt_admin misc
-    disabled
-
-#service dpfd /system/bin/dpfd
-#	user root
-#	group system media
-
-#
-#  External Modme control related services
-#
-
 # GPS
 service agpsd /system/bin/mtk_agpsd
     class main
@@ -625,56 +558,16 @@ service agpsd /system/bin/mtk_agpsd
     user gps
     group gps radio inet sdcard_r sdcard_rw misc
 
-service slpd /system/bin/slpd
-    class main
-    user gps
-    group gps inet
-
 service wifi2agps /system/bin/wifi2agps
     class main
     user wifi
     group gps inet
 
-service mnld /system/bin/mnld
+service mnld /system/xbin/mnld
     class main
     user gps
     group gps inet misc sdcard_rw sdcard_r media_rw system
     socket mnld stream 660 gps system
-
-#
-# sensor service (begin)
-#
-
-service msensord /system/bin/msensord
-    class main
-    oneshot
-
-service qmc5983d /system/bin/qmc5983d
-     disabled
-	 user system
-    group system
-    class main
-
-service qmc6983d /system/bin/qmc6983d
-    disabled
-    user system
-    group system
-    class main
-    oneshot
-    
-service mpud6050 /system/bin/mpud6050
-    oneshot
-    user system
-    group system
-
-service mc64xxd /system/bin/mc64xxd
-    disabled
-    user system
-    group system
-    class main
-#
-# sensor service (end)
-#
 
 #
 # emsvr service (start)
@@ -700,19 +593,6 @@ service fuelgauged /system/bin/fuelgauged
     user system
     group system
 
-service sn /system/bin/sn
-    class late_start
-    user system
-    group system sdcard_rw
-    oneshot
-
-#add for power-off alarm
-service poad /system/bin/poad
-    class main
-    user system
-    group system
-    oneshot
-
 service wmtLoader /system/bin/wmt_loader
     user root
     group root
@@ -724,118 +604,12 @@ service conn_launcher /system/bin/6620_launcher -p /system/etc/firmware/
     group system
     class core
 
-# OperaMax Service
-service OperaMaxSystem /system/bin/OperaMaxSystem
-    socket tunman stream 0666 system system
-    class main
-    disabled
-
-on property:persist.service.operamax=1
-    start OperaMaxSystem
-
-on property:persist.service.operamax=0
-    stop OperaMaxSystem
-
 # Charger
 service charger /sbin/healthd -c
     class charger
     critical
     seclabel u:r:healthd:s0
 
-###########add for 3Gdongle
-
-on boot
-#
-# change the right of ip-up ip-down scripts(begin)
-#
-chmod 777 /etc/ppp/ip-up
-chmod 777 /etc/ppp/ip-down
-#
-# change the right of ip-up ip-down scripts(end)
-#
-
-#
-# change the right of ip-up-ppp0 ip-down-ppp0 scripts(begin)
-#
-chmod 777 /etc/ppp/ip-up-ppp0
-chmod 777 /etc/ppp/ip-down-ppp0
-#
-# change the right of ip-up ip-down scripts(end)
-#
-
-chmod 0644 /system/lib/libzteevdo-ril.so
-chmod 0644 /system/lib/zterilPara
-chown root /system/bin/pppd
-chmod 4755 /system/bin/pppd
-chown root /system/bin/chat
-chmod 4755 /system/bin/chat
-
-
-#add by liangbo Blestech 20160420
-chmod 0666 /dev/bl229x
-
-#
-#ril-daemon (begin)
-#
-service ril-3gddaemon /system/bin/rild_dongle
-    class main
-    socket rild-dongle stream 660 root radio
-    socket rild-dongle-debug stream 660 radio radio
-    user root
-    group radio cache inet misc audio log
-    disabled
-
-#
-#ril-daemon (end)
-#
-
-#
-#usbdongled(begin)
-#
-service usbdongled /system/bin/dongled
-    class main
-	user root
-	group radio cache inet misc
-	enabled
-
-
-#
-#usbdongled(end)
-#
-
-#
-# add the service for call pppd(begin)
-#
-service zpppd_gprs /system/bin/init.gprs-pppd
-    user root
-	group radio cache inet misc
-	disabled
-	oneshot
-#
-# add the service for call pppd(end)
-#
-
-# Program binary service
-service program_binary /system/bin/program_binary_service
-    class late_start
-    user system
-    group graphics
-    oneshot
-
-service vtservice /system/bin/vtservice
-    class main
-    socket soc_vt_tcv dgram 660 radio system
-    socket soc_vt_stk dgram 660 radio system
-    socket soc_vt_svc dgram 660 radio system
-    socket volte_vt stream 660 root system
-    user system
-    group system camera graphics inet net_admin net_raw media sdcard_rw radio sdcard_r media_rw
-    ioprio rt 4
-    
-service etsd /system/bin/etsd
-    class late_start
-    user root
-
 service fingerprintd /system/bin/fingerprintd
     class late_start
-    user root
+    user system

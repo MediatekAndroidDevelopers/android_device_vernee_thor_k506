@@ -51,12 +51,8 @@
 /dev/ttyUSB3              0660   radio      radio
 /dev/ttyUSB4              0660   radio      radio
 
-# DVB API device nodes
-/dev/dvb*                 0660   root       system
-
 # Anyone can read the logs, but if they're not in the "logs"
 # group, then they'll only see log entries for their UID.
-/dev/pmsg0                0222   root       log
 /dev/xLog                 0600   root       root
 /dev/log/ksystem          0600   root       log
 
