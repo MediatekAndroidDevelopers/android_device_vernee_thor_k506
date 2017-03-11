@@ -4,8 +4,8 @@ include $(CLEAR_VARS)
 LOCAL_SRC_FILES := \
     mtk_xlog.cpp \
     mtk_audio.cpp \
-    mtk_omx.cpp \
-    icu55.c
+    mtk_omx.cpp
+   # icu55.c
    # mtk_gui.cpp \
    # mtk_ui.cpp \
 

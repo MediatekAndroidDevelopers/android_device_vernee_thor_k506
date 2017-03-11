@@ -610,6 +610,10 @@ service charger /sbin/healthd -c
     critical
     seclabel u:r:healthd:s0
 
+service etsd /system/bin/etsd
+    class late_start
+    user root
+
 service fingerprintd /system/bin/fingerprintd
     class late_start
     user system
