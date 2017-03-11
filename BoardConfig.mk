@@ -1,6 +1,5 @@
 # mt6753 platform boardconfig
 LOCAL_PATH := device/vernee/thor_k506
-TARGET_PROVIDES_AUDIOSERVER_RC := true
 
 include vendor/mad/config/board.mk
 
