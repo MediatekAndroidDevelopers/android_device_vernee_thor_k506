@@ -10,8 +10,9 @@ PRODUCT_AAPT_PREF_CONFIG := xhdpi
 TARGET_OTA_ASSERT_DEVICE := thor_k506,k06td_a
 
 PRODUCT_PACKAGES += \
-   libmtk_symbols \
-   libstlport
+    libmtkshim_log \
+    libmtkshim_audio \
+    libstlport
 
 # Lights
 PRODUCT_PACKAGES += \
@@ -56,11 +57,11 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/rootdir/meta_init.rc:root/meta_init.rc \
     $(LOCAL_PATH)/rootdir/ueventd.mt6735.rc:root/ueventd.mt6735.rc \
     $(LOCAL_PATH)/rootdir/init.recovery.mt6735.rc:root/init.recovery.mt6735.rc
-    
+
 # audioserver.rc
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/rootdir/audioserver.rc:/system/etc/init/audioserver.rc
-        
+
 
 # TWRP
 PRODUCT_COPY_FILES += \

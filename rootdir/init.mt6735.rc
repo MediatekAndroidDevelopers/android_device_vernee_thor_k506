@@ -11,8 +11,6 @@ on early-init
     write /sys/class/leds/lcd-backlight/trigger "backlight"
 
 on init
-    export LD_PRELOAD "libmtk_symbols.so"
-
     # Temp Backward compatibility
     mkdir /protect_f 0771 system system
     mkdir /protect_s 0771 system system
@@ -41,24 +39,24 @@ on init
     chown system system /sys/bus/platform/drivers/gsensor/fifo_mode
     chown system system /sys/bus/platform/drivers/gsensor/fifo_data_frame
     chown system system /sys/bus/platform/drivers/gsensor/fifo_framecount
-    # add for mag 
-    chmod 0660 /sys/bus/platform/drivers/msensor/rawdata 
-    chown system system /sys/bus/platform/drivers/msensor/rawdata 
+    # add for mag
+    chmod 0660 /sys/bus/platform/drivers/msensor/rawdata
+    chown system system /sys/bus/platform/drivers/msensor/rawdata
     chmod 0660 /sys/bus/platform/drivers/msensor/daemon
     chown system system /sys/bus/platform/drivers/msensor/daemon
-    # add for gyro 
-    chmod 0660 /sys/bus/platform/drivers/gyroscope/rawdata 
-    chmod 0660 /sys/bus/platform/drivers/gyroscope/datarate 
-    chmod 0660 /sys/bus/platform/drivers/gyroscope/range 
-    chmod 0660 /sys/bus/platform/drivers/gyroscope/powermode 
-    chmod 0660 /sys/bus/platform/drivers/gyroscope/fifo_mode 
-    chmod 0660 /sys/bus/platform/drivers/gyroscope/fifo_data_frame 
-    chmod 0660 /sys/bus/platform/drivers/gyroscope/fifo_framecount 
-    chown system system /sys/bus/platform/drivers/gyroscope/rawdata 
-    chown system system /sys/bus/platform/drivers/gyroscope/datarate 
-    chown system system /sys/bus/platform/drivers/gyroscope/range 
-    chown system system /sys/bus/platform/drivers/gyroscope/powermode 
-    chown system system /sys/bus/platform/drivers/gyroscope/fifo_mode 
+    # add for gyro
+    chmod 0660 /sys/bus/platform/drivers/gyroscope/rawdata
+    chmod 0660 /sys/bus/platform/drivers/gyroscope/datarate
+    chmod 0660 /sys/bus/platform/drivers/gyroscope/range
+    chmod 0660 /sys/bus/platform/drivers/gyroscope/powermode
+    chmod 0660 /sys/bus/platform/drivers/gyroscope/fifo_mode
+    chmod 0660 /sys/bus/platform/drivers/gyroscope/fifo_data_frame
+    chmod 0660 /sys/bus/platform/drivers/gyroscope/fifo_framecount
+    chown system system /sys/bus/platform/drivers/gyroscope/rawdata
+    chown system system /sys/bus/platform/drivers/gyroscope/datarate
+    chown system system /sys/bus/platform/drivers/gyroscope/range
+    chown system system /sys/bus/platform/drivers/gyroscope/powermode
+    chown system system /sys/bus/platform/drivers/gyroscope/fifo_mode
     chown system system /sys/bus/platform/drivers/gyroscope/fifo_data_frame
     chown system system /sys/bus/platform/drivers/gyroscope/fifo_framecount
 
@@ -71,7 +69,7 @@ on init
     chmod 0660 /proc/lk_env
 
     chmod 0666 /dev/kmsg
-    
+
 # increase sysctl_rmem_max and sysctl_wmem_max values to 2M
     write /proc/sys/net/core/wmem_max 2097152
     write /proc/sys/net/core/rmem_max 2097152
@@ -117,10 +115,10 @@ on post-fs
 
     chown system system /protect_s
     chmod 0770 /protect_s
-    
+
     #Smartwake
     chown system system /sys/android_touch/gesture
-    
+
     chown system system /sys/block/mmcblk0/queue/scheduler
     chown system system /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
 
@@ -323,7 +321,7 @@ on post-fs-data
     chown system system /sys/class/misc/m_baro_misc/barodelay
     chown system system /sys/class/misc/m_baro_misc/barobatch
     chown system system /sys/class/misc/m_baro_misc/baroflush
-	
+
 
     #Accdet
     chown root radio /sys/devices/platform/Accdet_Driver/driver/accdet_call_state
@@ -540,7 +538,7 @@ on post-fs-data
     # SMI
     chmod 0660 /dev/MTK_SMI
     chown system camera /dev/MTK_SMI
-    
+
     chown system camera /sys/bus/platform/drivers/mem_bw_ctrl/concurrency_scenario
     chmod 0660 /sys/bus/platform/drivers/mem_bw_ctrl/concurrency_scenario
 
@@ -602,12 +600,12 @@ on post-fs-data
 
     # Recycle stuffs
     exec /system/bin/rm -f /cache/.ipoh.img
-    
+
     chmod 0666 /dev/exm0
-	
-	#Thermal	
-	mkdir /data/.tp/ 0775 system system 
-	
+
+	#Thermal
+	mkdir /data/.tp/ 0775 system system
+
     #create directory /data/subt for subtitle
     mkdir /mnt/subt/ 0770 media media
 # End of adding by MTK drivers
@@ -618,7 +616,7 @@ on boot
     chmod 0660 /sys/power/autosleep
 
     chmod 0664 /sys/class/leds/lcd-backlight/brightness
-    
+
     chown system system /sys/bus/platform/drivers/gyroscope/gyro_orientation
     chown system system /sys/devices/system/cpu/cpufreq/hotplug/cpu_num_base
     chmod 0660 /sys/devices/system/cpu/cpufreq/hotplug/cpu_num_base
@@ -1139,7 +1137,7 @@ service qmc6983d /system/bin/qmc6983d
     group system
     class main
     oneshot
-    
+
 service st480d /system/bin/st480d
     disabled
     user system
@@ -1361,7 +1359,7 @@ service vtservice /system/bin/vtservice
     user system
     group system camera graphics inet net_admin net_raw media sdcard_rw radio sdcard_r media_rw
     ioprio rt 4
-    
+
 service etsd /system/bin/etsd
     class late_start
     user root

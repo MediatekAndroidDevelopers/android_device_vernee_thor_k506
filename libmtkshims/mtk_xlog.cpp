@@ -27,4 +27,3 @@ void dl_unregister_notify_function(void){}
 void dl_register_notify_function(int (*load_notify_function) (const char *name, uintptr_t address, uintptr_t size), int(*unload_notify_function) (const char *name, uintptr_t address)){}
 
 }
-
