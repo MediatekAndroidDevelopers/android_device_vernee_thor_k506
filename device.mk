@@ -10,8 +10,6 @@ PRODUCT_AAPT_PREF_CONFIG := xhdpi
 TARGET_OTA_ASSERT_DEVICE := thor_k506,k06td_a
 
 PRODUCT_PACKAGES += \
-    libmtkshim_log \
-    libmtkshim_audio \
     libstlport
 
 # Lights
