@@ -5,15 +5,15 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 
 # Inherit from hardware-specific part of the product configuration
-$(call inherit-product, device/vernee/thor_k506/device.mk)
+$(call inherit-product, device/vernee/thor/device.mk)
 
 # Release name
-PRODUCT_RELEASE_NAME := thor_k506
+PRODUCT_RELEASE_NAME := thor
 
 EXTENDED_FONT_FOOTPRINT := true
 
-PRODUCT_DEVICE := thor_k506
-PRODUCT_NAME := full_thor_k506
+PRODUCT_DEVICE := thor
+PRODUCT_NAME := full_thor
 PRODUCT_BRAND := Vernee
 PRODUCT_MODEL := Thor
 PRODUCT_MANUFACTURER := Vernee

@@ -1,4 +1,4 @@
-LOCAL_PATH := device/vernee/thor_k506
+LOCAL_PATH := device/vernee/thor
 
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
 
@@ -7,7 +7,7 @@ PRODUCT_AAPT_CONFIG := normal
 PRODUCT_AAPT_PREF_CONFIG := xhdpi
 
 # Recovery allowed devices
-TARGET_OTA_ASSERT_DEVICE := thor_k506,k06td_a
+TARGET_OTA_ASSERT_DEVICE := thor
 
 PRODUCT_PACKAGES += \
     libstlport
@@ -66,4 +66,4 @@ $(call inherit-product, frameworks/native/build/phone-xhdpi-2048-dalvik-heap.mk)
 $(call inherit-product, vendor/mad/config/common.mk)
 
 # Vendor
-$(call inherit-product, vendor/vernee/thor_k506/thor_k506-vendor.mk)
+$(call inherit-product, vendor/vernee/thor/thor-vendor.mk)

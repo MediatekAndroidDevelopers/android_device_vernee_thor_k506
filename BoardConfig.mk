@@ -1,5 +1,5 @@
 # mt6753 platform boardconfig
-LOCAL_PATH := device/vernee/thor_k506
+LOCAL_PATH := device/vernee/thor
 
 include vendor/mad/config/board.mk
 
@@ -39,7 +39,7 @@ BOARD_KERNEL_CMDLINE := bootopt=64S3,32N2,64N2
 BOARD_KERNEL_BASE := 0x40078000
 BOARD_KERNEL_PAGESIZE := 2048
 BOARD_MKBOOTIMG_ARGS := --base 0x40078000 --pagesize 2048 --kernel_offset 0x00008000 --ramdisk_offset 0x03f88000 --second_offset 0x00e88000 --tags_offset 0x0df88000 --board 1450352440
-TARGET_KERNEL_SOURCE := kernel/vernee/thor_k506
+TARGET_KERNEL_SOURCE := kernel/vernee/thor
 TARGET_KERNEL_ARCH := arm64
 TARGET_KERNEL_HEADER_ARCH := arm64
 TARGET_KERNEL_CONFIG := k06td_a_defconfig
