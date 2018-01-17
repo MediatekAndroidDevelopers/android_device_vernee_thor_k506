@@ -1,5 +1,2 @@
 # device specific syscalls
-sysinfo: 1
-sched_getscheduler: 1
 sched_setaffinity: 1
-sched_getparam: 1
