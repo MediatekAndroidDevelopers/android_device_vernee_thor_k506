@@ -10,8 +10,6 @@ $(call inherit-product, device/vernee/thor/device.mk)
 # Release name
 PRODUCT_RELEASE_NAME := thor
 
-EXTENDED_FONT_FOOTPRINT := true
-
 PRODUCT_DEVICE := thor
 PRODUCT_NAME := full_thor
 PRODUCT_BRAND := Vernee
